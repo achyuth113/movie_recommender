@@ -1,0 +1,112 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movie Recommender</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script>
+            var hasScrolled=false;
+            $(document).ready(function(){
+                $("textarea").attr("rows",1);
+                var search_results = $("#search-results");
+                search_results.hide();
+                var search_bar = $("#search-bar");
+                search_bar.focus(function () {
+                    search_results.show()
+                });
+                $('html').click(function () {
+                    search_results.empty();
+                    search_results.hide();
+                })
+            });
+            function search_bar(slug) {
+                var search_results = $("#search-results");
+                if(slug.length>0){
+                    search_results.empty();
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            $('#search-results').show();
+                            var json = JSON.parse(this.responseText);
+                            json.forEach(function(item){
+                               var temp = $("<tr><td class='pic'><img class='thumbnail' src="+item.Poster+"/></td><td class='btn btn-default'><a href='/movie_app/movie_details/"+item.id+"'>"+item.Title+"</a></td></tr>");
+                               search_results.append(temp);
+							   
+                            });
+                        }
+                    };
+                    xhttp.open("GET" ,"/movie_app/movie/api/"+slug,true);
+                    xhttp.send();
+                }else{
+                    search_results.empty()
+                }
+            }
+            $(window).scroll(function () {
+                var scroll = $(this).scrollTop();
+                if( scroll > 250){
+                    $('#header_text').hide();
+                    $('nav').addClass('shrink')
+                }else{
+                    $('#header_text').show();
+                    $('nav').removeClass('shrink')
+                    //if(scroll < 10) $('#header').animate({padding:'1% 15%'},100);
+                }
+            });
+            setInterval(function () {
+                if (hasScrolled){
+    
+                }
+            },250)
+        </script>
+    {% block head %}
+
+    {% endblock %}
+</head>
+<body class="back">
+<nav  id="header" class="navbar navbar-default navbar-fixed-top front">
+  <div class="container-fluid">
+        <div class="nav navbar-nav mr-auto navbar-left">
+            <img id="header_logo"  class="navbar-brand" src="{% static 'Instagram-header-logo.png'%}"/>
+            <img id="header_text"  class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+         {% if user.is_authenticated or valid %}
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item"><a href="{% url 'movie_app:recommend'%}">Recommender</a></li>
+            </ul>
+           <div class="navbar-nav" style="display: inline-block;width: 100px;" id="search_container">
+                <input type="text"  onkeyup="search_bar(this.value)"  id="search-bar" placeholder="search.."/>
+               <div id="search-results-container">
+                   <table id="search-results" ></table>
+               </div>
+           </div>
+        {% endif %}
+
+        <ul class="nav navbar-nav mr-auto navbar-right">
+            {% if user.is_authenticated  or valid%}
+                <li class="nav-item"><a href="{% url 'movie_app:profile' pk=id %}">Profile</a></li>
+                <li class="nav-item"><a href="{% url 'movie_app:logout_form' %}">Log Out</a></li>
+            {% else %}
+                <li class="nav-item"><a href="{% url 'movie_app:login_form' %}">Log In</a></li>
+                <li class="nav-item"><a href="{% url 'movie_app:signup_form' %}">Sign Up</a></li>
+            {% endif %}
+        </ul>
+     </div>
+   </div>
+ </nav>
+    <div class="container back">

@@ -1,0 +1,30 @@
+{% include 'base.html' %}
+{% block head %}
+    <style>
+        td{
+            padding-bottom:10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <center>
+            <form method="post">
+                {% csrf_token %}
+                <table class="table">
+                <tr class="fieldwrapper">
+                    <td>{{ loginform.username.label_tag }}</td>
+                    <td>{{ loginform.username }}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ loginform.password.label_tag }}</td>
+                    <td>{{ loginform.password }}</td>
+                </tr>
+                </table>
+                <button type="submit" class="btn btn-success">Log In</button>
+
+            </form>
+    </center>
+</div>
+</body>
+</html>
+{% endblock %}

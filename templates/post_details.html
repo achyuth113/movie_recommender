@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <script>
+        var hasLiked = "{{ hasLiked }}";
+        var likedClass = "glyphicon-heart";
+        var unlikedClass = "glyphicon-heart-empty";
+
+
+    $(document).ready(function(){
+        var element = $('.likes')[0];
+        if(hasLiked === "1"){
+            element.classList.remove(unlikedClass);
+            element.classList.add(likedClass,"red");
+        }else{
+            //element.classList.remove(likedClass,"red");
+            element.classList.add(unlikedClass);
+        }
+    });
+    var like_toggle = function (element) {
+            var xhttp =  new XMLHttpRequest();
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
+            xhttp.send()
+        };
+        var addComment =function (event) {
+            if(event.key === "Enter"){
+                var comment =$('#comment_text')[0];
+                $.ajax({
+                    type : "POST",
+                    url : "{% url 'posts:post_add_comment' post.id %}",
+                    data : {
+                        "comment": comment.value
+                        //"csrfmiddlewaretoken": csrf
+                    },
+                    success : function (data) {
+                           var response = data.split(":");
+                           console.log(response);
+                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+" </strong> "+response[1]+"</p>\n</div>");
+                            $("#comments_container").append(comment);
+                            $("#comment_text")[0].value=""
+                    },
+                    failure : function (data) {
+                        console.log("failure");
+                        console.log(data);
+                    }
+                })
+            }
+        };
+        function likeDoubleClick(id) {
+            console.log("working");
+            var xhttp =  new XMLHttpRequest();
+            var element = $('#'+id)[0];
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","like/"+id,true);
+            xhttp.send()
+        }
+    </script>
+
+    <div class="posted_data">
+        {% if user.id == post.uploader.id %}
+            <nav >
+                <a href="{% url 'posts:delete_post' post.id %}" class="controller"><button class="btn btn-danger pull-right">Delete</button></a>
+                <a href="{% url 'posts:edit_post' post.id %}" class="controller"><button class="btn btn-primary pull-right">Edit</button></a>
+            </nav>
+        {% endif %}
+        <div class="posted_picture">
+            <img ondblclick="likeDoubleClick({{ post.id }})" src="{{ post.image.url }}"/>
+        </div>
+        <div class="post_related_data" >
+            <div class="user_details">
+                <img  class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
+                <p><strong>{{ profile.user.username }}</strong></p> <p class="status">{{ post.status }}</p>
+            </div>
+
+            <br>
+            <div class="likes_comments">
+                <div id="comments_container">
+                    {% for comment in comments %}
+                        <div class="comment">
+                        <p><strong> {{ comment.comment }} </strong> {{ comment.comment }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="functionalities">
+                <p><span onclick="like_toggle(this)" id="{{ post.id }}" class="likes glyphicon" post_id="{{ post.id }}"></span> <a href="{% url 'posts:post_likes' post.id %}"><span class="likes_count" >{{ likes.count }}</span> likes</a></p>
+                    <div id="add_comment">
+                        <input type="Text" name="comment" autocomplete="off" onkeypress="addComment(event)" id="comment_text" placeholder="Add a comment..."/><br>
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

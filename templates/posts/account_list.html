@@ -1,0 +1,30 @@
+{% include 'base.html' with id=id  valid=True only%}
+{% block content %}  
+<center><h3>{{title}}</h3><br><br>
+    <div class="card" style="width: 60rem;height:3rem;">
+                
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for user in userform %}
+		   <div class="card" style="width: 65rem;height:15rem;">
+                <img class="img-circle" alt="Cinque Terre" style="float:left;width: 10rem;height:10rem;" src="{{user.form.Poster.url}}" >
+                <div class="card-header">
+                    <p style="float:left">&nbsp&nbsp&nbsp Title:<a href="{% url 'movie_app:movie_profile' pk=user.form.id %}">{{ user.form.Title }}</a></p>
+                    <p style="float:right">
+                    {% if user.id == id %}
+                    {% elif user.follow == 1 %}
+                        <a href="{% url 'movie_app:remove' pk=user.form.id %}" class="btn btn-success">remove</a>
+                    {% else  %}
+                        <a href="{% url 'movie_app:add' pk=user.form.id %}" class="btn btn-primary">add_to_list</a>
+                    {% endif %}
+                    </p><br><br><br><br>
+                </div>
+                <div class="card-body">
+                    <center style="float:left">Genre: {{ user.form.Genre }}<br>Actor: {{ user.form.Actors }}</center>
+                </div>
+           </div>
+		   <br><br><br>
+        {% endfor %}
+    </ul>
+</center>
+{% endblock %}

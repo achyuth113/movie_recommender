@@ -1,0 +1,26 @@
+{% include 'base.html' with id=id  valid=True only%}
+{% block head %}
+    <style>
+        td{
+            padding-bottom:10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+<div class="container back">
+        <form id="update_user_form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table">
+                <tr class="fieldwrapper">
+                    <td>{{postform.file.label_tag}}</td>
+                    <td>{{postform.file}}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{postform.caption.label_tag}}</td>
+                    <td>{{postform.caption}}</td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    </div>
+{% endblock %}

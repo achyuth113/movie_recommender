@@ -1,0 +1,271 @@
+
+*{
+ font-size:20px;
+}
+.red{
+  color:red;
+}
+.glyphicon{
+  size:100px;
+}
+form{
+  margin-left:20%;
+}
+.display_pictures{
+  display:inline-block;
+  float:left;
+  height: 150px;
+  width: 150px;
+  border-radius: 100px;
+}
+.container-fluid p{
+  display:inline-block
+}
+.site_details p{
+  display:inline-block;
+  margin-right:1em;
+}
+.user_data{
+  float:left;
+  width:40%;
+  height:150px;
+  margin-left:10%;
+}
+.posts{
+  display:block;
+  margin-top:15%;
+}
+.user_header p{
+  margin-right:1em
+}
+.posted_data{
+  width:100%;
+
+}
+.post_related_data{
+  font-size:0.1em;
+  width:40%;
+  float:left;
+  padding-left:2%;
+  position:relative;
+}
+.posted_picture{
+    width:60%;
+    float:left
+}
+.posted_picture img{
+  max-width:100%;
+  object-fit:cover;
+}
+.posted_picture p{
+  width:60%;
+  display:inline-block;
+}
+.user_details img{
+  width:3em;
+  height:3em;
+  margin-right:1em;
+}
+.post_related_data img{
+   width:40px;
+   height:40px;
+}
+
+.comment p, .comment p strong{
+  font-size:15px;
+}
+.container{
+  margin-top:5%;
+}
+#followButton{
+  display:inline-block
+}
+
+.user_data button{
+  width:200px
+}
+.feed{
+  width:60%;
+  border:0.5px solid lightgrey;
+  margin-top:1%;
+}
+.feed img{
+  max-width:100%
+}
+.feed p{
+  text-align:left;
+  margin-left:2%
+}
+.functionalities{
+  position:absolute;
+}
+#comment_text{
+  width:99%;
+  border:none;
+}
+nav a{
+    color:black;
+}
+.container{
+  margin-top:2%;
+}
+.back{
+  background-color:#f5f5f5
+}
+.front{
+  background-color:white;
+}
+.feed .display_pictures{
+    width:30px;
+    height:30px;
+    margin-left: 2%;
+    margin-top:1%;
+}
+.user_details p{
+  margin-top:1%;
+}
+#currentDP{
+  width:450px;
+}
+.post_container{
+    display:inline-block;
+    width: 350px;
+    height:200px;
+    margin-right:5px;
+    margin-top:10px;
+}
+.post_container img {
+    width: 100%;
+    height: 100%;
+}
+.thumbnail{
+  width:50px;
+  height:50px;
+  border-radius:100px;
+}
+.user_list{
+  margin-left:20%;
+}
+#search_container{
+  margin-top:2%;
+  margin-left:2%;
+  border-radius:2%;
+  width:250px;
+}
+#search-bar{
+    border:none;
+    background-color:#f1f0f0;
+    padding-left:2%;
+    width:100%;
+
+}
+#search-results-container{
+    position:absolute;
+    width:250px;
+    height:200px;
+}
+#search-results{
+  position:relative;
+  z-index:10;
+  background-color:white;
+  width:100%;
+  border:1px solid ;
+  transition: height 2s;
+  overflow:scroll;
+}
+#search-results img{
+  margin-left:15%;
+  margin-top:10%;
+}
+td.pic{
+  width:30%;
+  padding-right:5%;
+}
+#add_comment{
+
+  width:100%;
+}
+.comment_text{
+    position:relative;
+    background-color: transparent;
+    padding:2%;
+    border-top: 1px solid lightgrey;
+    width:100%;
+}
+.comment_text:focus, #search-bar:focus{
+    outline: none;
+}
+.navbar-brand{
+  padding:1%;
+
+}
+input{
+  border:none;
+}
+#header_text{
+  margin-left:10px;
+  border-left:1px solid lightgrey;
+}
+#header_logo{
+  padding:5px;
+}
+#header{
+  padding: 10px 15%
+}
+.navbar-header{
+  width:250px;
+}
+.shrink{
+    padding: 0px 15%;
+}
+nav{
+    transition: all 1s ease-in-out;
+}
+.shrink #header_logo{
+    padding:8px;
+}
+body{
+  padding-top:5%
+}
+a{
+    color:black;
+}
+@media(max-width:600px){
+  *{
+    font-size:15px
+  }
+  body{
+    padding-top:20%;
+  }
+  #header_text{
+    margin-left:5px;
+  }
+  .feed{
+    width:100%
+  }
+  .display_pictures{
+    width:60px;
+    height:60px;
+    margin-top:10%;
+  }
+  .user_data{
+    width:60%;
+  }
+  .posted_picture{
+    width:100%;
+    margin-top:1%;
+  }
+  .post_related_data{
+    width:100%;
+  }
+  .functionalities{
+    width:100%
+  }
+  form{
+    margin:0;
+  }
+  #currentDP{
+    width:80%;
+    height:400px;
+  }
+}

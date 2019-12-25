@@ -1,0 +1,35 @@
+{% include 'base.html' with id=id  valid=True only%}
+{% block head %}
+
+{% endblock %}
+{% block body %}
+        <script>
+        $(document).ready(function(){
+            var imgfield = $('#customImage')[0];
+            var current = $('#currentDP')[0];
+            imgfield.onchange = function(){
+                console.log("working");
+                var reader = new FileReader();
+                reader.onloadend = function(){
+                    current.src =reader.result;
+                };
+                reader.readAsDataURL(imgfield.files[0])
+            }
+        })
+    </script>
+        <form method="post" enctype="multipart/form-data"  >
+            {% csrf_token %}
+            <table class="table">
+                <tr class="fieldwrapper">
+                    <td><label for="currentDP" style="width:50px;height:50px;">Current DP</label></td>
+                    <td><img name="currentDP" id="currentDP" src="{{profiledetails.avatar.url}}"/></td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ profileform.avatar.label_tag }}</td>
+                    <td>{{ profileform.avatar }}</td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+
+{% endblock %}

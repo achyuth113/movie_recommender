@@ -1,0 +1,27 @@
+{% include 'base.html' with id=id  valid=True only%}
+{% block content %}
+<div class="container back">
+        <div class="user_header">
+            <img class="display_pictures" src="{{userform.profile.avatar.url}}" />
+            <div class="user_data">
+                <div class="container-fluid">
+                    <strong><p>{{userform.username}}</p></strong>
+                    <p style="float:right">
+                    {% if userform.id == id %}
+                        <a href="{% url 'movie_app:update' pk=id %}">
+                            <button class="btn btn-primary">Update</button>
+                        </a>
+                    {% endif %}
+                    </p>
+                </div>
+                <div class="site_details">
+                    <p><a href="{% url 'movie_app:watchlist' pk=userform.id %}">Watchlist_Count:</a>  <strong>{{ userform.watchlist_count }}</strong> </p>
+                </div>
+                <div>
+                    <p>{{userform.profile.bio}}</p>
+                    <a href="http://{{userform.profile.website}}">{{userform.profile.website}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

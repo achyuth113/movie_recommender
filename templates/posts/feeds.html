@@ -1,0 +1,124 @@
+{% include 'base.html' with id=id  valid=True only%}
+
+{% block body %}
+
+    <script>
+        var likedClass = "glyphicon-heart";
+        var unlikedClass = "glyphicon-heart-empty";
+
+        $(document).ready(function(){
+            var liked_posts = [];
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                  var jason = JSON.parse(this.responseText);
+
+                  jason.forEach(function(item){
+                      var temp = Object.values(item);
+                      liked_posts.push(temp[0]);
+
+                  });
+                  var like_buttons = $('.likes').toArray();
+                  like_buttons.forEach(function (value) {
+                      var id = parseInt(value.getAttribute('post_id'));
+                      if(liked_posts.includes(id)){
+                          value.classList.add(likedClass,"red");
+                      }else{
+                          value.classList.add(unlikedClass);
+                      }
+
+                  })
+                }
+            };
+            xhttp.open("GET","/posts/likes/api/",true);
+            xhttp.send();
+        });
+        var like_toggle = function (element) {
+            var xhttp =  new XMLHttpRequest();
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","/posts/like/"+element.getAttribute("post_id"),true);
+            xhttp.send()
+        };
+        var addComment =function (event,id) {
+            if(event.key === "Enter"){
+                var comment =$('#comment_text'+id)[0];
+                $.ajax({
+                    type : "POST",
+                    url : "/posts/"+id+"/comment",
+                    data : {
+                        "comment": comment.value
+                    },
+                    success : function (data) {
+                           var response = data.split(":");
+                           console.log(response);
+                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+"</strong> "+response[1]+" </p>\n</div>");
+                            $("#comments_container"+id).append(comment);
+                            $("#comment_text"+id)[0].value=""
+                    },
+                    failure : function (data) {
+                        console.log("failure");
+                        console.log(data);
+                    }
+                })
+            }
+        };
+        function likeDoubleClick(id) {
+            console.log("working");
+            var xhttp =  new XMLHttpRequest();
+            var element = $('#'+id)[0];
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","/posts/like/"+id,true);
+            xhttp.send()
+        }
+    </script>
+    <center>
+
+        {% for feedObject in feedsData %}
+            <div class="feed front">
+                <div class="user_details">
+                    <img class="display_pictures" src="{{ feedObject.feed.user_id.profile.avatar.url }}" alt="display picture"/>
+                    <p><a href="{% url 'users:profile' pk=feedObject.feed.user_id.id %}"><strong>{{ feedObject.feed.user_id.username }}</strong></a></p>
+                </div>
+                <img ondblclick="likeDoubleClick({{ feedObject.feed.id }})" src="{{ feedObject.feed.file.url }}"/>
+
+                    <div>
+                    <p><span onclick="like_toggle(this)" id="{{ feedObject.feed.id }}" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <a href="{% url 'posts:post_likes' feedObject.feed.id %}"><span class="likes_count" >{{ feedObject.likesCount }}</span> likes</a></p>
+                    <p><strong>{{ feedObject.feed.user_id.username }}:</strong> {{ feedObject.feed.caption }}</p>
+                    <p><a style="font-size:13px" href="{% url 'posts:view' pk=feedObject.feed.user_id.id slug=feedObject.feed.id%}">view post</a></p>
+                    <div id="comments_container{{ feedObject.feed.id }}">
+                        {% for comment in feedObject.comment %}
+                        <p style="font-size:16px"><strong style="font-size:16px">{{ comment.user_id.username }}:</strong> {{ comment.comment }}</p>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    <div id="add_commnet">
+                         <input type="Text" name="comment" autocomplete="" onkeypress="addComment(event,{{ feedObject.feed.id }})" class="comment_text" id="comment_text{{ feedObject.feed.id }}" placeholder="Add a comment..."/><br>
+                    </div>
+            </div>
+        {% endfor %}
+    </center>
+{% endblock %}
