@@ -1,14 +1,21 @@
 #------------------------------------------------------------------------------#
-                         Movie Recommender System:
+
+							          Movie Recommender System:
+
 #------------------------------------------------------------------------------#
+
 This is an hobby project, which is implemented in order to get an hands-on with
 pandas and django. IMDB movie data set is used in this project.
+
 #------------------------------------------------------------------------------#
 
 
 #------------------------------------------------------------------------------#
+
 Description Of Files And Directories:
+
 #------------------------------------------------------------------------------#
+
 readme.txt: 
   this file.
 
